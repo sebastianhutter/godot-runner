@@ -7,7 +7,7 @@ FROM ubuntu:22.04
 # setup requirements for godot headless
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
-  && apt-get install -y ca-certificates curl unzip xvfb gosu \
+  && apt-get install -y ca-certificates curl unzip xvfb gosu git git-lfs \
   && apt-get install -y cmake pkg-config mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglew-dev libglfw3-dev libglm-dev libao-dev libmpg123-dev libxcursor-dev libxkbcommon-dev libxinerama-dev \
   && apt-get install -y libdbus-1-3 libasound2 libpulse-dev libspeechd-dev alsa-base alsa-utils \
   && rm -rf /var/lib/apt/lists/*

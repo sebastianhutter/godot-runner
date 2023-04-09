@@ -8,7 +8,8 @@ FROM ubuntu:22.04
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
   && apt-get install -y ca-certificates curl unzip xvfb gosu \
-  && apt-get install -y cmake pkg-config mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglew-dev libglfw3-dev libglm-dev libao-dev libmpg123-dev \
+  && apt-get install -y cmake pkg-config mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglew-dev libglfw3-dev libglm-dev libao-dev libmpg123-dev libxcursor-dev libxkbcommon-dev libxinerama-dev \
+  && apt-get install -y libdbus-1-3 libasound2 libpulse-dev libspeechd-dev \
   && rm -rf /var/lib/apt/lists/*
 
 # install godot, godot_bin env var is required by gdunit script
@@ -26,13 +27,13 @@ RUN mkdir /tmp/godot \
 # setup ci user with godot templates and gdunit4
 RUN useradd -ms /bin/bash runner
 USER runner
-RUN mkdir -p "${HOME}/.config/godot" "${HOME}/.local/share/godot/templates" "${HOME}/.local/share/godot/addons"
+RUN mkdir -p "${HOME}/.config/godot" "${HOME}/.local/share/godot/export_templates" "${HOME}/.local/share/godot/addons"
 
 RUN mkdir /tmp/godot \
     && cd /tmp/godot \
     && curl -L "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" -o templates.tpz \
     && unzip templates.tpz \
-    && mv templates "${HOME}/.local/share/godot/templates/${GODOT_VERSION}.stable" \
+    && mv templates "${HOME}/.local/share/godot/export_templates/${GODOT_VERSION}.stable" \
     && cd \
     && rm -rf /tmp/godot
 
@@ -40,11 +41,8 @@ ARG GDUNIT_VERSION="4.1.0"
 ENV GDUNIT_BIN="/home/runner/.local/share/godot/addons/gdUnit4/runtest.sh"
 RUN mkdir /tmp/godot \
     && cd /tmp/godot \
-    && curl -L "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz" -o templates.tpz \
     && curl -L "https://github.com/MikeSchulze/gdUnit4/archive/refs/tags/v${GDUNIT_VERSION}.zip" -o gdunit.zip \
-    && unzip templates.tpz \
     && unzip gdunit.zip \
-    && mv templates "${HOME}/.local/share/godot/templates/${GODOT_VERSION}.stable" \
     && mv "gdUnit4-${GDUNIT_VERSION}/addons/gdUnit4" "${HOME}/.local/share/godot/addons/gdUnit4" \
     && chmod +x "${GDUNIT_BIN}" \
     && cd \

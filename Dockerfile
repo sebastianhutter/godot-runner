@@ -7,7 +7,7 @@ FROM ubuntu:22.04
 # setup requirements for godot headless
 ENV DEBIAN_FRONTEND="noninteractive"
 RUN apt-get update \
-  && apt-get install -y ca-certificates curl unzip xvfb gosu git git-lfs \
+  && apt-get install -y ca-certificates curl unzip xvfb gosu git git-lfs sudo \
   && apt-get install -y cmake pkg-config mesa-utils libglu1-mesa-dev freeglut3-dev mesa-common-dev libglew-dev libglfw3-dev libglm-dev libao-dev libmpg123-dev libxcursor-dev libxkbcommon-dev libxinerama-dev \
   && apt-get install -y libdbus-1-3 libasound2 libpulse-dev libspeechd-dev alsa-base alsa-utils \
   && rm -rf /var/lib/apt/lists/*
@@ -48,6 +48,7 @@ RUN mkdir /tmp/godot \
     && cd \
     && rm -rf /tmp/godot
 
+
 # setup entrypoint which sets up virtual display and then passes the 
 # execution to the runner suer
 USER root
@@ -55,3 +56,6 @@ ENV DISPLAY=":99"
 ADD entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT [ "/entrypoint.sh" ]
+
+# add sudoers entry to allow sudo-ing for run in k8s/jenkins
+RUN echo "runner ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/runner

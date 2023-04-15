@@ -37,18 +37,6 @@ RUN mkdir /tmp/godot \
     && cd \
     && rm -rf /tmp/godot
 
-ARG GDUNIT_VERSION="4.1.0"
-ENV GDUNIT_BIN="/home/runner/.local/share/godot/addons/gdUnit4/runtest.sh"
-RUN mkdir /tmp/godot \
-    && cd /tmp/godot \
-    && curl -L "https://github.com/MikeSchulze/gdUnit4/archive/refs/tags/v${GDUNIT_VERSION}.zip" -o gdunit.zip \
-    && unzip gdunit.zip \
-    && mv "gdUnit4-${GDUNIT_VERSION}/addons/gdUnit4" "${HOME}/.local/share/godot/addons/gdUnit4" \
-    && chmod +x "${GDUNIT_BIN}" \
-    && cd \
-    && rm -rf /tmp/godot
-
-
 # setup entrypoint which sets up virtual display and then passes the 
 # execution to the runner suer
 USER root

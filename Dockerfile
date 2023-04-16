@@ -25,7 +25,7 @@ RUN mkdir /tmp/godot \
     && rm -rf /tmp/godot
 
 # setup ci user with godot templates and gdunit4
-RUN useradd -ms /bin/bash runner
+RUN useradd -ms /bin/bash -G audio,video runner
 USER runner
 RUN mkdir -p "${HOME}/.config/godot" "${HOME}/.local/share/godot/export_templates" "${HOME}/.local/share/godot/addons"
 

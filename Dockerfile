@@ -13,7 +13,7 @@ RUN apt-get update \
   && rm -rf /var/lib/apt/lists/*
 
 # install godot, godot_bin env var is required by gdunit script
-ARG GODOT_VERSION="4.0.3"
+ARG GODOT_VERSION="4.2"
 ENV GODOT_BIN="/usr/local/bin/godot"
 RUN mkdir /tmp/godot \
     && cd /tmp/godot \
